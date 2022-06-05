@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "566853364400",
+    "project_id": "registrocomposicoes",
+    "storage_bucket": "registrocomposicoes.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566853364400:android:19e74d93f9237cee81e975",
+        "android_client_info": {
+          "package_name": "com.example.registrocomposicoes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566853364400-hq1dr1l04sp70j663e1449ijo5g649b3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvU-5G_gKpOiN3ckTVoOS9_O8so05I4VQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566853364400-hq1dr1l04sp70j663e1449ijo5g649b3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
