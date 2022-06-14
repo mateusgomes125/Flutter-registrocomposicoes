@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:registrocomposicoes/pages/edit_page.dart';
 import 'package:registrocomposicoes/pages/form_page.dart';
+import 'package:registrocomposicoes/pages/data/User_dao.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -10,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //late FirebaseFirestore _firestore;
+
 
   Stream<QuerySnapshot> _getList() {
     return FirebaseFirestore.instance.collection('composicoes').snapshots();
@@ -56,7 +58,16 @@ class _HomePageState extends State<HomePage> {
 
                     final infoTitulo = doc['titulo'];
                     final infoDecricao = doc['descricao'];
-                    final infoArq = doc['nomeArq'];
+                    final infoArq = doc['nomeArq'].toString();
+                    final infoData = doc['dataHora'].toString();
+                    final infoCID = doc['cid'].toString();
+                    
+                    // final user = FirebaseFirestore.instance.collection("users");
+
+                    // final infoUser = FirebaseFirestore.instance
+                    //     .collection("users")
+                    //     .where("uid", isEqualTo: doc['userId'])
+                    //     .get();
 
                     final updateDados = doc;
                     return ListTile(
@@ -76,6 +87,9 @@ class _HomePageState extends State<HomePage> {
                               infoTitulo,
                               infoDecricao,
                               infoArq,
+                              infoData,
+                              infoCID,
+                              //infoUser,
                               updateDados,
                             );
                           },
