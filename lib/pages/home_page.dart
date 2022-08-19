@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:registrocomposicoes/pages/edit_page.dart';
 import 'package:registrocomposicoes/pages/form_page.dart';
 import 'package:registrocomposicoes/pages/data/User_dao.dart';
-
+import 'package:registrocomposicoes/pages/user_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,32 +12,46 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser!;
 
-
-  Stream<QuerySnapshot> _getList() {
-    return FirebaseFirestore.instance.collection('composicoes').snapshots();
+  Stream<QuerySnapshot> _getList(String uid) {
+    return FirebaseFirestore.instance
+        .collection('composicoes')
+        .where("userId", isEqualTo: uid)
+        .snapshots();
   }
+
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Composições'),
         actions: <Widget>[
+
           IconButton(
-            icon: Icon(Icons.logout_sharp),
-            color: Colors.white,
-            onPressed: () => FirebaseAuth.instance.signOut(),
-          )
+              icon: Icon(Icons.person),
+              color: Colors.white,
+              onPressed: () //=> FirebaseAuth.instance.signOut(),
+              {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const UserPage()),
+                );
+              }
+            ),
+            IconButton(
+              icon: Icon(Icons.logout_sharp),
+              color: Colors.white,
+              onPressed: () => FirebaseAuth.instance.signOut(),
+            ),
         ],
       ),
       body: Container(
         padding: const EdgeInsets.all(16),
         child: StreamBuilder<QuerySnapshot>(
-          stream: _getList(),
-          builder: (_, snapshot) {
+          stream: _getList(user.uid.toString()),
+          builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
               case ConnectionState.waiting:
@@ -47,13 +61,14 @@ class _HomePageState extends State<HomePage> {
               case ConnectionState.active:
               case ConnectionState.done:
                 if (snapshot.data!.docs.isEmpty) {
+                  print(user.uid.toString());
                   return Center(
                     child: Text('Não há composições'),
                   );
                 }
                 return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (_, index) {
+                  itemBuilder: (context, index) {
                     final DocumentSnapshot doc = snapshot.data!.docs[index];
 
                     final infoTitulo = doc['titulo'];
@@ -61,15 +76,8 @@ class _HomePageState extends State<HomePage> {
                     final infoArq = doc['nomeArq'].toString();
                     final infoData = doc['dataHora'].toString();
                     final infoCID = doc['cid'].toString();
-                    
-                    // final user = FirebaseFirestore.instance.collection("users");
-
-                    // final infoUser = FirebaseFirestore.instance
-                    //     .collection("users")
-                    //     .where("uid", isEqualTo: doc['userId'])
-                    //     .get();
-
                     final updateDados = doc;
+
                     return ListTile(
                       title: Text(
                         doc['titulo'],
@@ -89,7 +97,6 @@ class _HomePageState extends State<HomePage> {
                               infoArq,
                               infoData,
                               infoCID,
-                              //infoUser,
                               updateDados,
                             );
                           },

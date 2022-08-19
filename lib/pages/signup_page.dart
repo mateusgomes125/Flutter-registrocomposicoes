@@ -69,16 +69,14 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Form(
         key: formKey,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          SizedBox(height: 60),
-          FlutterLogo(size: 120),
-          SizedBox(height: 20),
-
-          Text(
-            'Olá, \n Bem-vindo(a) ao cadastro!',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 32),
+           SizedBox(
+            child: Image.asset(
+              'imagens/nota_musical1.png',
+              // scale: 2,
+              width: 200,
+              height: 200,
+            ),           
           ),
-
           SizedBox(height: 40),
 
           TextFormField(
@@ -136,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(labelText: 'Data de Nascimento'),
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: (dataNascimento) => dataNascimento != null
+            validator: (dataNascimento) => dataNascimento == null
                 ? 'Insira sua data de nascimento!'
                 : null,
             onTap: () {
@@ -219,41 +217,41 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Future signUp() async {
-    final isValid = formKey.currentState!.validate();
-    if (!isValid) return;
+  // Future signUp() async {
+  //   final isValid = formKey.currentState!.validate();
+  //   if (!isValid) return;
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(child: CircularProgressIndicator()),
-    );
+  //   showDialog(
+  //     context: context,
+  //     barrierDismissible: false,
+  //     builder: (context) => Center(child: CircularProgressIndicator()),
+  //   );
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text.trim(), password: password.text.trim());
-      userData();
-    } on FirebaseAuthException catch (e) {
-      print(e);
+  //   try {
+  //     await FirebaseAuth.instance.createUserWithEmailAndPassword(
+  //         email: email.text.trim(), password: password.text.trim());
+  //     userData();
+  //   } on FirebaseAuthException catch (e) {
+  //     print(e);
 
-      final SnackBar snackBar = SnackBar(
-          content: Text("A conta já está sendo usada!"),
-          backgroundColor: Colors.red);
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
+  //     final SnackBar snackBar = SnackBar(
+  //         content: Text("A conta já está sendo usada!"),
+  //         backgroundColor: Colors.red);
+  //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  //   }
 
-    navigatorKey.currentState!.popUntil((route) => route.isFirst);
-  }
+  //   navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  // }
 
-  Future<void> userData() async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    FirebaseAuth auth = FirebaseAuth.instance;
-    String uid = auth.currentUser!.uid.toString();
-    users.add({
-      'dataNascimento': dataNascimento.text,
-      'nome': nome.text,
-      'cpf': cpf.text,
-      'uid': uid
-    });
-  }
+  // Future<void> userData() async {
+  //   CollectionReference users = FirebaseFirestore.instance.collection('users');
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+  //   String uid = auth.currentUser!.uid.toString();
+  //   users.add({
+  //     'dataNascimento': dataNascimento.text,
+  //     'nome': nome.text,
+  //     'cpf': cpf.text,
+  //     'uid': uid
+  //   });
+  // }
 }

@@ -183,6 +183,5 @@ class _EditState extends State<Edit> {
     const SnackBar snackBar =
         SnackBar(content: Text("A composição foi alterada com sucesso! "));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  
   }
 }

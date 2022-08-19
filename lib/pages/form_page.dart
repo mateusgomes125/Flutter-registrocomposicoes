@@ -147,10 +147,10 @@ class _FormPageState extends State<FormPage> {
       var request = http.MultipartRequest(
           "POST", Uri.parse('https://api.nft.storage/upload'));
       request.headers['accept'] = 'application/json';
-      request.headers['Content-Type'] = 'image/*';
+      request.headers['Content-Type'] = 'application/pdf';
       request.headers['Authorization'] =
           'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEVGN0M2NEJDYjA2QkU0YTVlMjVlMWM3ODMxNzgwNzA1NEFCN2E2ZGEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MzM3MTcyNDc4NCwibmFtZSI6InJlZ2lzdHJvX2NvbXBvc2ljb2VzIn0.6Y1JFjZ8ZMyz1wOMrvtuEiB8fkhaS3ZY-TsUXpWJhtY';
-      request.fields["text_field"] = "teste";
+      request.fields["text_field"] = "composicao";
 
       var pic = http.MultipartFile.fromBytes('file', file.bytes!.toList(),
           filename: file.name, contentType: MediaType('*', '*'));

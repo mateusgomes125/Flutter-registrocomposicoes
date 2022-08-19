@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:registrocomposicoes/pages/forgot_password_page.dart';
 import 'package:registrocomposicoes/pages/home_page.dart';
 import 'about_page.dart';
 import 'package:registrocomposicoes/main.dart';
@@ -48,112 +49,125 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.all(16),
       child: Form(
         key: formKey,
-        child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, 
-        children: [
-        SizedBox(height: 60),
-        FlutterLogo(size: 120),
-        SizedBox(height: 20),
-        Text(
-          'Olá, \n Bem-vindo(a) ao Login!',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 32),
-        ),
-        SizedBox(height: 40),
-        TextFormField(
-          controller: email,
-          cursorColor: Colors.black,
-          textInputAction: TextInputAction.next,
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(labelText: 'Email'),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (email) => email != null && !EmailValidator.validate(email) 
-                  ? 'Entre com um email valido!'
-                  : null,
-        ),
-        SizedBox(height: 4),
-        TextFormField(
-          controller: password,
-          cursorColor: Colors.black,
-          textInputAction: TextInputAction.done,
-          obscureText: _obscurePass,
-          decoration: InputDecoration(
-              labelText: 'Senha',
-              suffixIcon: IconButton(
-                icon: _obscurePass
-                    ? Icon(Icons.visibility)
-                    : Icon(Icons.visibility_off),
-                iconSize: 30,
-                onPressed: () => setState(() => _obscurePass = !_obscurePass),
-              )),
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (password) =>
-              password != null && password.length < 6 
-                  ? 'Mínimo de 6 caracteres!'
-                  : null,
-        ),
-        SizedBox(height: 20),
-        ElevatedButton.icon(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size.fromHeight(50),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          SizedBox(
+            child: Image.asset(
+              'imagens/nota_musical1.png',
+              // scale: 2,
+              width: 200,
+              height: 200,
+            ),           
           ),
-          icon: Icon(Icons.lock_open, size: 32),
-          label: Text(
-            'Log In',
-            style: TextStyle(fontSize: 24),
+
+          TextFormField(
+            controller: email,
+            cursorColor: Colors.black,
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(labelText: 'Email'),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (email) =>
+                email != null && !EmailValidator.validate(email)
+                    ? 'Entre com um email valido!'
+                    : null,
           ),
-          onPressed: () {
-            // setState(() {
-            //   email.text.isEmpty ? _valida = true : _valida = false;
-            //   password.text.isEmpty ? _valida = true : _valida = false;
-            // });
-            if (formKey.currentState!.validate()) {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) =>
-                    Center(child: CircularProgressIndicator()),
-              );
+          SizedBox(height: 4),
+          TextFormField(
+            controller: password,
+            cursorColor: Colors.black,
+            textInputAction: TextInputAction.done,
+            obscureText: _obscurePass,
+            decoration: InputDecoration(
+                labelText: 'Senha',
+                suffixIcon: IconButton(
+                  icon: _obscurePass
+                      ? Icon(Icons.visibility)
+                      : Icon(Icons.visibility_off),
+                  iconSize: 30,
+                  onPressed: () => setState(() => _obscurePass = !_obscurePass),
+                )),
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (password) => password != null && password.length < 6
+                ? 'Mínimo de 6 caracteres!'
+                : null,
+          ),
+          SizedBox(height: 20),
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size.fromHeight(50),
+            ),
+            icon: Icon(Icons.lock_open, size: 32),
+            label: Text(
+              'Log In',
+              style: TextStyle(fontSize: 24),
+            ),
+            onPressed: () {
+              // setState(() {
+              //   email.text.isEmpty ? _valida = true : _valida = false;
+              //   password.text.isEmpty ? _valida = true : _valida = false;
+              // });
+              if (formKey.currentState!.validate()) {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) =>
+                      Center(child: CircularProgressIndicator()),
+                );
 
-              userDao.LogIn(context, email.text, password.text);
+                userDao.LogIn(context, email.text, password.text);
 
-              navigatorKey.currentState!.popUntil((route) => route.isFirst);
-            }
-          },
-        ),
-        SizedBox(height: 24),
-        RichText(
-            text: TextSpan(
-                style: TextStyle(color: Colors.grey[700], fontSize: 20),
-                text: 'Não possui uma conta?',
-                children: [
-              TextSpan(
-                recognizer: TapGestureRecognizer()
-                  ..onTap = widget.onClickedSignUp,
-                text: ' Cadastre-se!',
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              )
-            ])),
-        SizedBox(height: 48),
-        RichText(
-            text: TextSpan(
-          recognizer: TapGestureRecognizer()
-            ..onTap = () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const About()),
-              );
+                navigatorKey.currentState!.popUntil((route) => route.isFirst);
+              }
             },
-          text: ' Sobre',
-          style: TextStyle(
-            decoration: TextDecoration.underline,
-            color: Theme.of(context).colorScheme.secondary,
           ),
-        ))
-      ]),
+          SizedBox(height: 24),
+          GestureDetector(
+            child: Text(
+              'Esqueceu a senha?',
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 20,
+              ),
+            ),
+            onTap: () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => ForgotPassword(),
+            )),
+          ),
+          SizedBox(height: 16),
+          RichText(
+              text: TextSpan(
+                  style: TextStyle(color: Colors.grey[700], fontSize: 20),
+                  text: 'Não possui uma conta?',
+                  children: [
+                TextSpan(
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = widget.onClickedSignUp,
+                  text: ' Cadastre-se!',
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 20,
+                  ),
+                )
+              ])),
+          SizedBox(height: 48),
+          RichText(
+              text: TextSpan(
+            recognizer: TapGestureRecognizer()
+              ..onTap = () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const About()),
+                );
+              },
+            text: ' Sobre',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ))
+        ]),
       ),
     );
   }

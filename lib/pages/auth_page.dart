@@ -8,15 +8,16 @@ import 'login_page.dart';
 class AuthPage extends StatefulWidget {
   @override
   State<AuthPage> createState() => _AuthPageState();
+
 }
 
 class _AuthPageState extends State<AuthPage> {
   bool isLogin = true;
-
+ 
   @override
   Widget build(BuildContext context) => isLogin 
       ? LoginPage(onClickedSignUp: toggle) 
       : SignUpPage(onClickedSignIn: toggle);
-
-      void toggle() => setState(() => isLogin = !isLogin);
+void toggle() => setState(() => isLogin = !isLogin);
+     
 }

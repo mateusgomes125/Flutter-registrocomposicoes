@@ -4,12 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserDao extends ChangeNotifier {
-  
   final auth = FirebaseAuth.instance;
   late User usuario;
   late String errorMessage;
-
-
 
 // TODO: Add helper methods - Métodos de ajuda
   bool isLoggedIn() {
@@ -23,23 +20,19 @@ class UserDao extends ChangeNotifier {
   String? email() {
     return auth.currentUser?.email;
   }
-  
+
   _getUser() {
     usuario = auth.currentUser!;
     notifyListeners();
   }
 
-
-Future LogIn(context, String email, String password) async {
+  Future LogIn(context, String email, String password) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.trim(), 
-          password: password.trim()
-        );
+          email: email.trim(), password: password.trim());
 
       _getUser();
       notifyListeners();
-
     } on FirebaseAuthException catch (e) {
       if (e.code == 'wrong-password') {
         //throw AuthException('Senha incorreta. Tente novamente');
@@ -49,41 +42,45 @@ Future LogIn(context, String email, String password) async {
         errorMessage = 'Email não encontrado. Digite novamente ou cadastre-se';
       }
 
-      final SnackBar snackBar = SnackBar(
-          content: Text(errorMessage),
-          backgroundColor: Colors.red);
+      final SnackBar snackBar =
+          SnackBar(content: Text(errorMessage), backgroundColor: Colors.red);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-
-  Future signUp(context, String email, String password, String nome, String rg, String dataNascimento, String telefone) async {
+  Future signUp(context, String email, String password, String nome, String rg,
+      String dataNascimento, String telefone) async {
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.trim(), 
-          password: password.trim()
-          );
+          email: email.trim(), password: password.trim());
       userData(nome, rg, dataNascimento, telefone);
     } on FirebaseAuthException catch (e) {
       print(e);
 
-      final SnackBar snackBar = SnackBar(
-          content: Text(e.toString()),
-          backgroundColor: Colors.red);
+      final SnackBar snackBar =
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
-  Future<void> userData(String nome, String cpf, String dataNascimento, String telefone) async {
+  Future<void> userData(
+      String nome, String cpf, String dataNascimento, String telefone) async {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     FirebaseAuth auth = FirebaseAuth.instance;
     String uid = auth.currentUser!.uid.toString();
-    users.add({
+    final user = <String, String>{
       'dataNascimento': dataNascimento,
       'nome': nome,
       'cpf': cpf,
-      'telefone': telefone,
-      'uid': uid
-    });
+      'telefone': telefone
+    };
+    users.doc(uid).set(user);
+    // users.add({
+    //   'id': uid,
+    //   'dataNascimento': dataNascimento,
+    //   'nome': nome,
+    //   'cpf': cpf,
+    //   'telefone': telefone
+    // });
   }
 }
